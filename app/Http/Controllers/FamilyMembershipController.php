@@ -19,7 +19,12 @@ class FamilyMembershipController extends Controller
         #karena post author-nya ga berubah
         #jadi ngecek siapa ownernya pake email (post_title)
 
-		// $this->userid = 1241497;
+        #sebenarnya belum jelas parameter yang akan diterima
+        #apakah guid atau id atau email (user/member) nya
+        #jadi sementara userid dan email nya di assign dulu disini
+        
+
+		$this->userid = 1241497;
         // $this->userid = 1399792;
 
         // $this->useremail = 'glory.tannia@kompas.com';
@@ -45,12 +50,13 @@ class FamilyMembershipController extends Controller
 
     /**
     * func to get id wp_posts owner
-    * @param int $userid
+    * @param string $useremail
     * @return int
     */
-    public function getIdPostOwner($userid)
+    public function getIdPostOwner($useremail)
     {
-        $query = PostModel::select('ID')->where('post_author', '=', $userid)->where('post_type', '=', 'wc_memberships_team')->first();
+        // $query = PostModel::select('ID')->where('post_author', '=', $userid)->where('post_type', '=', 'wc_memberships_team')->first();
+        $query = PostModel::select('ID')->where('post_title', '=', $useremail)->where('post_type', '=', 'wc_memberships_team')->first();
 
         return $query->ID;
     }
@@ -65,7 +71,7 @@ class FamilyMembershipController extends Controller
     {
     	$message = "";
     	$emailMember = $request->email_member;
-        $ownerid = $this->getIdPostOwner($this->userid);
+        $ownerid = $this->getIdPostOwner($this->useremail);
 
     	#harusnya dari parameter id login (owner)
     	$ins = PostModel::insertGetId([
